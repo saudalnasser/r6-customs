@@ -1,0 +1,22 @@
+# Ignore development specific folders
+node_modules/
+.vs/
+.idea/
+*.iml
+README.html
+LICENSE.html
+
+# Yarn files
+.yarn/install-state.gz
+.yarn/build-state.yml
+
+# Environment variables
+.DS_Store
+.env*
+
+# Ignore heapsnapshot and log files
+*.heapsnapshot
+*.log
+
+# Ignore dist files
+dist/
