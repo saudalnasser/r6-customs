@@ -1,1 +1,5 @@
-console.log('Hello world!');
+import 'dotenv/config';
+import config from './config';
+
+config.validate();
+
