@@ -19,7 +19,9 @@
     "build": "tsc",
     "build:watch": "tsc -w",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\"",
+    "deploy:global": "tsc && node dist/scripts/deploy-commands-global.js",
+    "deploy:guild": "tsc && node dist/scripts/deploy-commands-guild.js"
   },
   "engines": {
     "node": ">=16.15.1"
