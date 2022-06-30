@@ -5,7 +5,7 @@ import Event from '../structures/event.structure';
 import EventStore from '../stores/event.store';
 import Container from '../container';
 
-class EventsHandler implements Handler {
+class EventHandler implements Handler {
   private eventStore: EventStore;
 
   public constructor(eventStore: EventStore) {
@@ -53,4 +53,4 @@ class EventsHandler implements Handler {
   }
 }
 
-export default EventsHandler;
+export default EventHandler;

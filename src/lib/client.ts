@@ -4,7 +4,7 @@ import ConsoleLogStrategy from './utils/logger/strategies/console.strategy';
 import Store from './stores/store';
 import Handler from './handlers/handler';
 import EventStore from './stores/event.store';
-import EventsHandler from './handlers/events.handler';
+import EventHandler from './handlers/event.handler';
 import CommandStore from './stores/command.store';
 import CommandHandler from './handlers/command.handler';
 import GuardStore from './stores/guard.store';
@@ -31,8 +31,8 @@ export default class Client extends DiscordJsClient {
     this.stores = [commandStore, eventStore, guardStore];
 
     const commandHandler: CommandHandler = new CommandHandler(commandStore, guardStore);
-    const eventsHandler: EventsHandler = new EventsHandler(eventStore);
-    this.handlers = [commandHandler, eventsHandler];
+    const eventHandler: EventHandler = new EventHandler(eventStore);
+    this.handlers = [commandHandler, eventHandler];
   }
 
   public async run(token: string): Promise<void> {
