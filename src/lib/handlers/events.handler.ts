@@ -1,10 +1,16 @@
 import { Client, ClientEvents, Collection } from 'discord.js';
 import { importStructures } from '../utils/structure.utils';
+import Container from '../container';
 import Handler from './handler';
 import Event from '../structures/event.structure';
 
 class EventsHandler implements Handler {
   public events!: Collection<string, Event<keyof ClientEvents>>;
+  public container: Container;
+
+  public constructor(container: Container) {
+    this.container = container;
+  }
 
   public async initialize(client: Client): Promise<void> {
     await this.loadEvents();
@@ -12,7 +18,7 @@ class EventsHandler implements Handler {
   }
 
   private async loadEvents(): Promise<void> {
-    this.events = await importStructures<Event<keyof ClientEvents>>('event');
+    this.events = await importStructures<Event<keyof ClientEvents>>('event', this.container);
   }
 
   private async handleEvents(client: Client): Promise<void> {
