@@ -6,7 +6,7 @@ import Handler from './handlers/handler';
 import EventStore from './stores/event.store';
 import EventsHandler from './handlers/events.handler';
 import CommandStore from './stores/command.store';
-import CommandsHandler from './handlers/commands.handler';
+import CommandHandler from './handlers/command.handler';
 import GuardStore from './stores/guard.store';
 import Container from './container';
 
@@ -30,9 +30,9 @@ export default class Client extends DiscordJsClient {
     const guardStore: GuardStore = new GuardStore();
     this.stores = [commandStore, eventStore, guardStore];
 
-    const commandsHandler: CommandsHandler = new CommandsHandler(commandStore, guardStore);
+    const commandHandler: CommandHandler = new CommandHandler(commandStore, guardStore);
     const eventsHandler: EventsHandler = new EventsHandler(eventStore);
-    this.handlers = [commandsHandler, eventsHandler];
+    this.handlers = [commandHandler, eventsHandler];
   }
 
   public async run(token: string): Promise<void> {

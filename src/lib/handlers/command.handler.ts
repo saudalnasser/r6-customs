@@ -14,7 +14,7 @@ import Guard from '../structures/guard.structure';
 import GuardStore from '../stores/guard.store';
 import Container from '../container';
 
-class CommandsHandler implements Handler {
+class CommandHandler implements Handler {
   private commandStore: CommandStore;
   private guardStore: GuardStore;
 
@@ -95,4 +95,4 @@ class CommandsHandler implements Handler {
   }
 }
 
-export default CommandsHandler;
+export default CommandHandler;
