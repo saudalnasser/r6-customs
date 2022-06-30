@@ -1,6 +1,7 @@
 import { Collection } from 'discord.js';
 import { join } from 'path';
 import fs from 'fs';
+import Container from '../container';
 import Structure from '../structures/structure';
 
 type structureName = 'command' | 'event';
@@ -15,7 +16,8 @@ async function importType(structureName: structureName, file: string): Promise<a
  * @returns array of structures of a specific type
  */
 export async function importStructures<T extends Structure>(
-  structureName: structureName
+  structureName: structureName,
+  container: Container
 ): Promise<Collection<string, T>> {
   const collection: Collection<string, T> = new Collection();
 
@@ -24,7 +26,7 @@ export async function importStructures<T extends Structure>(
 
   for (const file of files) {
     const Type: any = await importType(structureName, file);
-    const instance: T = new Type() as T;
+    const instance: T = new Type(container) as T;
 
     collection.set(instance.options.name, instance);
   }
