@@ -1,46 +1,34 @@
 import {
   Client,
-  Collection,
   CommandInteraction,
   CommandInteractionOptionResolver,
   GuildBasedChannel,
 } from 'discord.js';
 import { yellowBright, greenBright, redBright } from 'colorette';
-import { importStructures } from '../utils/structure.utils';
 import Container from '../container';
 import Handler from './handler';
-import Command from '../structures/command.structure';
+import CommandStore from '../stores/command.store';
 
 class CommandsHandler implements Handler {
-  public commands!: Collection<string, Command>;
-  public container: Container;
+  private commandStore: CommandStore;
 
-  public constructor(container: Container) {
-    this.container = container;
+  public constructor(commandStore: CommandStore) {
+    this.commandStore = commandStore;
   }
 
-  public async initialize(client: Client): Promise<void> {
-    await this.loadCommands();
-    await this.handleCommands(client);
-  }
-
-  private async loadCommands(): Promise<void> {
-    this.commands = await importStructures<Command>('command', this.container);
-  }
-
-  private async handleCommands(client: Client): Promise<void> {
+  public async initialize(client: Client, container: Container): Promise<void> {
     client.on('interactionCreate', async (interaction) => {
       if (interaction.isCommand()) {
         try {
-          await this.commands.get(interaction.commandName)?.run({
+          await this.commandStore.get(interaction.commandName)?.run({
             client,
             interaction,
             args: interaction.options as CommandInteractionOptionResolver,
           });
 
-          this.container.logger.info(this.generateMessage('success', client, interaction));
+          container.logger.info(this.generateMessage('success', client, interaction));
         } catch (error: any) {
-          this.container.logger.error(this.generateMessage('error', client, interaction, error));
+          container.logger.error(this.generateMessage('error', client, interaction, error));
         }
       }
     });
