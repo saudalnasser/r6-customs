@@ -3,6 +3,8 @@ import Logger, { LogLevel, LogStrategy } from './utils/logger/logger';
 import ConsoleLogStrategy from './utils/logger/strategies/console.strategy';
 import Store from './stores/store';
 import Handler from './handlers/handler';
+import StructuresLoader from './utils/structures/structures-loader';
+import StrictLoadStrategy from './utils/structures/strategies/strict.strategy';
 import EventStore from './stores/event.store';
 import EventHandler from './handlers/event.handler';
 import CommandStore from './stores/command.store';
@@ -18,12 +20,15 @@ export interface ClientOptions extends DiscordJsClientOptions {
 export default class Client extends DiscordJsClient {
   private handlers: Handler[];
   private stores: Store<any>[];
+  private structuresLoader: StructuresLoader;
   private container!: Container;
 
   public constructor(options: ClientOptions) {
     super(options);
 
     this.initializeContainer(options);
+
+    this.structuresLoader = new StructuresLoader(new StrictLoadStrategy(), this.container);
 
     const commandStore: CommandStore = new CommandStore();
     const eventStore: EventStore = new EventStore();
@@ -37,7 +42,7 @@ export default class Client extends DiscordJsClient {
 
   public async run(token: string): Promise<void> {
     try {
-      for (const store of this.stores) await store.initialize(this.container);
+      for (const store of this.stores) await store.initialize(this.structuresLoader);
       for (const handler of this.handlers) await handler.initialize(this, this.container);
 
       await this.login(token);
