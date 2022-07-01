@@ -4,10 +4,13 @@ import {
   CommandInteraction,
   CommandInteractionOptionResolver,
 } from 'discord.js';
-import Container from '../container';
+import { Guards } from './guard.structure';
 import Structure, { StructureOptions } from './structure';
+import Container from '../container';
 
-export interface CommandOptions extends StructureOptions, ChatInputApplicationCommandData {}
+export interface CommandOptions extends StructureOptions, ChatInputApplicationCommandData {
+  guards?: (keyof typeof Guards)[];
+}
 
 export interface RunOptions {
   client: Client;

@@ -1,10 +1,10 @@
 import { Collection } from 'discord.js';
 import { join } from 'path';
 import fs from 'fs';
-import Container from '../container';
 import Structure from '../structures/structure';
+import Container from '../container';
 
-type structureName = 'command' | 'event';
+type structureName = 'command' | 'event' | 'guard';
 
 async function importType(structureName: structureName, file: string): Promise<any> {
   return (await import(`../../../dist/${structureName}s/${file}`))?.default;
