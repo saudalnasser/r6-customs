@@ -1,6 +1,6 @@
 import { ClientEvents } from 'discord.js';
-import Container from '../container';
 import Structure, { StructureOptions } from './structure';
+import Container from '../container';
 
 export interface EventOptions extends StructureOptions {
   name: keyof ClientEvents;

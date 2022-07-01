@@ -1,26 +1,57 @@
+import { GuardResult } from './../structures/guard.structure';
 import {
   Client,
   CommandInteraction,
   CommandInteractionOptionResolver,
   GuildBasedChannel,
+  InteractionDeferReplyOptions,
 } from 'discord.js';
 import { yellowBright, greenBright, redBright } from 'colorette';
-import Container from '../container';
 import Handler from './handler';
+import Command from '../structures/command.structure';
 import CommandStore from '../stores/command.store';
+import Guard from '../structures/guard.structure';
+import GuardStore from '../stores/guard.store';
+import Container from '../container';
 
 class CommandsHandler implements Handler {
   private commandStore: CommandStore;
+  private guardStore: GuardStore;
 
-  public constructor(commandStore: CommandStore) {
+  public constructor(commandStore: CommandStore, guardStore: GuardStore) {
     this.commandStore = commandStore;
+    this.guardStore = guardStore;
   }
 
   public async initialize(client: Client, container: Container): Promise<void> {
     client.on('interactionCreate', async (interaction) => {
       if (interaction.isCommand()) {
         try {
-          await this.commandStore.get(interaction.commandName)?.run({
+          const command: Command | undefined = this.commandStore.get(interaction.commandName);
+          if (!command) return;
+
+          const guards: Guard[] = this.guardStore.getMany(command.options.guards ?? []);
+
+          for (const guard of guards) {
+            const result: GuardResult = await guard.run({
+              client,
+              interaction,
+              args: interaction.options as CommandInteractionOptionResolver,
+            });
+
+            if (!result.ok) {
+              if (guard.options.deferReply) {
+                await interaction.deferReply(result.response as InteractionDeferReplyOptions);
+                await interaction.editReply(result.response);
+              } else {
+                await interaction.reply(result.response);
+              }
+
+              return;
+            }
+          }
+
+          await command.run({
             client,
             interaction,
             args: interaction.options as CommandInteractionOptionResolver,

@@ -1,8 +1,8 @@
 import 'dotenv/config';
-import config from './config';
-import Client, { ClientOptions } from './lib/client';
 import { LogLevel } from './lib/utils/logger/logger';
 import { createColors } from 'colorette';
+import Client, { ClientOptions } from './lib/client';
+import config from './config';
 
 config.validate();
 
