@@ -28,6 +28,8 @@ export async function importStructures<T extends Structure>(
     const Type: any = await importType(structureName, file);
     const instance: T = new Type(container) as T;
 
+    if (instance.options.disabled) continue;
+
     collection.set(instance.options.name, instance);
   }
 
