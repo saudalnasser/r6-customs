@@ -1,14 +1,13 @@
 import { Collection } from 'discord.js';
-import { importStructures } from '../utils/structure.utils';
 import Store from './store';
 import Guard from '../structures/guard.structure';
-import Container from '../container';
+import StructuresLoader from '../utils/structures/structures-loader';
 
 class GuardStore implements Store<Guard> {
   private guards!: Collection<string, Guard>;
 
-  public async initialize(container: Container): Promise<void> {
-    this.guards = await importStructures<Guard>('guard', container);
+  public async initialize(loader: StructuresLoader): Promise<void> {
+    this.guards = await loader.load<Guard>('guard');
   }
 
   public get(name: string): Guard | undefined {

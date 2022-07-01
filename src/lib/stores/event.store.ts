@@ -1,14 +1,13 @@
 import { ClientEvents, Collection } from 'discord.js';
-import { importStructures } from '../utils/structure.utils';
+import StructuresLoader from '../utils/structures/structures-loader';
 import Event from '../structures/event.structure';
 import Store from './store';
-import Container from '../container';
 
 class EventStore implements Store<Event<keyof ClientEvents>> {
   private events!: Collection<string, Event<keyof ClientEvents>>;
 
-  public async initialize(container: Container): Promise<void> {
-    this.events = await importStructures<Event<keyof ClientEvents>>('event', container);
+  public async initialize(loader: StructuresLoader): Promise<void> {
+    this.events = await loader.load<Event<keyof ClientEvents>>('event');
   }
 
   public get(name: string): Event<keyof ClientEvents> | undefined {
