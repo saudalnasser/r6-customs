@@ -1,5 +1,5 @@
 import ApplyOptions from '../lib/decorators/options.decorator';
-import Event, { EventOptions } from '../lib/pieces/event.piece';
+import Event, { EventOptions } from '../lib/structures/pieces/event.piece';
 import Events from '../lib/types/events.enum';
 
 @ApplyOptions<EventOptions>({
