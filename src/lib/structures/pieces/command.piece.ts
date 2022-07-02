@@ -4,7 +4,7 @@ import {
   CommandInteraction,
   CommandInteractionOptionResolver,
 } from 'discord.js';
-import { Guards } from './guard.piece';
+import { Guards } from '../../types/guards.enum';
 import Piece, { PieceOptions } from './piece';
 import Container from '../../container';
 
