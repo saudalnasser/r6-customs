@@ -1,4 +1,4 @@
-import ApplyOptions from '../lib/decorators/options.decorator';
+import ApplyOptions from '../lib/decorators/pieces/options.decorator';
 import Event, { EventOptions } from '../lib/structures/pieces/event.piece';
 import Events from '../lib/types/events.enum';
 
