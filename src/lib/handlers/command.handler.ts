@@ -7,9 +7,9 @@ import {
 } from 'discord.js';
 import { yellowBright, greenBright, redBright } from 'colorette';
 import Handler from './handler';
-import Command from '../pieces/command.piece';
+import Command from '../structures/pieces/command.piece';
 import CommandStore from '../stores/command.store';
-import Guard, { GuardResult } from './../pieces/guard.piece';
+import Guard, { GuardResult } from '../structures/pieces/guard.piece';
 import GuardStore from '../stores/guard.store';
 import Container from '../container';
 

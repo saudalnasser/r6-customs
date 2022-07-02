@@ -2,7 +2,7 @@ import { Collection } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import { LoadStrategy, PieceName } from '../pieces-loader';
-import Piece from '../../../pieces/piece';
+import Piece from '../../../structures/pieces/piece';
 import Container from '../../../container';
 
 class StrictLoadStrategy implements LoadStrategy {

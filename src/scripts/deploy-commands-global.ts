@@ -5,7 +5,7 @@ import { ApplicationCommandDataResolvable, Collection } from 'discord.js';
 import PiecesLoader from '../lib/utils/pieces/pieces-loader';
 import StrictLoadStrategy from '../lib/utils/pieces/strategies/strict.strategy';
 import Container from '../lib/container';
-import Command from '../lib/pieces/command.piece';
+import Command from '../lib/structures/pieces/command.piece';
 import config from '../config';
 
 (async (): Promise<void> => {

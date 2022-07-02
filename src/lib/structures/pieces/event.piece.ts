@@ -1,6 +1,6 @@
 import { ClientEvents } from 'discord.js';
 import Piece, { PieceOptions } from './piece';
-import Container from '../container';
+import Container from '../../container';
 
 export interface EventOptions extends PieceOptions {
   name: keyof ClientEvents;

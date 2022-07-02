@@ -1,5 +1,5 @@
 import { Collection } from 'discord.js';
-import Piece from '../../pieces/piece';
+import Piece from '../../structures/pieces/piece';
 import Container from '../../container';
 
 export type PieceName = 'command' | 'event' | 'guard';
