@@ -9,8 +9,6 @@ import {
 import Piece, { PieceOptions } from './piece';
 import Container from '../../container';
 
-export enum Guards {}
-
 type Response = string | MessagePayload | InteractionReplyOptions | WebhookEditMessageOptions;
 
 export class GuardResult {
