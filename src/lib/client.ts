@@ -7,9 +7,9 @@ import Store from './structures/stores/store';
 import CommandStore from './structures/stores/command.store';
 import EventStore from './structures/stores/event.store';
 import GuardStore from './structures/stores/guard.store';
-import Handler from './handlers/handler';
-import EventHandler from './handlers/event.handler';
-import CommandHandler from './handlers/command.handler';
+import Handler from './structures/handlers/handler';
+import CommandHandler from './structures/handlers/command.handler';
+import EventHandler from './structures/handlers/event.handler';
 import Container from './container';
 
 export interface ClientOptions extends DiscordJsClientOptions {
