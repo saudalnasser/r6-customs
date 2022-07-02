@@ -14,23 +14,15 @@ class EventHandler implements Handler {
 
   public async initialize(client: Client, container: Container): Promise<void> {
     for (const event of this.eventStore.getIterable()) {
-      if (event.options.once) {
-        client.once(event.options.name, async (...args): Promise<any> => {
-          try {
-            await event.run(...args);
-          } catch (error: any) {
-            container.logger.error(this.generateErrorMessage(client, event, error));
-          }
-        });
-      } else {
-        client.once(event.options.name, async (...args): Promise<any> => {
-          try {
-            await event.run(...args);
-          } catch (error: any) {
-            container.logger.error(this.generateErrorMessage(client, event, error));
-          }
-        });
-      }
+      const method: 'once' | 'on' = event.options.once ? 'once' : 'on';
+
+      client[method](event.options.name, async (...args): Promise<any> => {
+        try {
+          await event.run(...args);
+        } catch (error: any) {
+          container.logger.error(this.generateErrorMessage(client, event, error));
+        }
+      });
     }
   }
 
