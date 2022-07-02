@@ -5,8 +5,9 @@ import {
   MessagePayload,
   WebhookEditMessageOptions,
 } from 'discord.js';
-import Piece, { PieceOptions } from './piece';
+import Structure from '../structure';
 import Container from '../container';
+import Piece, { PieceOptions } from './piece';
 
 type Response = string | MessagePayload | InteractionReplyOptions | WebhookEditMessageOptions;
 
@@ -29,13 +30,13 @@ export interface RunOptions {
   args: CommandInteractionOptionResolver;
 }
 
-export default abstract class Guard implements Piece {
-  public options: GuardOptions;
-  public container: Container;
+export default abstract class Guard extends Structure implements Piece {
+  public readonly options: GuardOptions;
 
   public constructor(options: GuardOptions, container: Container) {
+    super(container);
+
     this.options = options;
-    this.container = container;
   }
 
   public abstract run(options: RunOptions): Promise<GuardResult>;

@@ -5,6 +5,7 @@ import {
 } from 'discord.js';
 import { Guards } from '../../types/guards.enum';
 import Piece, { PieceOptions } from './piece';
+import Structure from '../structure';
 import Container from '../container';
 
 export interface CommandOptions extends PieceOptions, ChatInputApplicationCommandData {
@@ -16,13 +17,13 @@ export interface RunOptions {
   args: CommandInteractionOptionResolver;
 }
 
-export default abstract class Command implements Piece {
-  public options: CommandOptions;
-  public container: Container;
+export default abstract class Command extends Structure implements Piece {
+  public readonly options: CommandOptions;
 
   public constructor(options: CommandOptions, container: Container) {
+    super(container);
+
     this.options = options;
-    this.container = container;
   }
 
   public abstract run(options: RunOptions): Promise<any>;
