@@ -1,5 +1,5 @@
-import Piece from '../structures/pieces/piece';
-import PiecesLoader from '../utils/pieces/pieces-loader';
+import Piece from '../pieces/piece';
+import PiecesLoader from '../../utils/pieces/pieces-loader';
 
 interface Store<T extends Piece> {
   initialize(loader: PiecesLoader): Promise<void>;

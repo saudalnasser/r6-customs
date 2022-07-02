@@ -1,6 +1,6 @@
 import { ClientEvents, Collection } from 'discord.js';
-import PiecesLoader from '../utils/pieces/pieces-loader';
-import Event from '../structures/pieces/event.piece';
+import PiecesLoader from '../../utils/pieces/pieces-loader';
+import Event from '../pieces/event.piece';
 import Store from './store';
 
 class EventStore implements Store<Event<keyof ClientEvents>> {

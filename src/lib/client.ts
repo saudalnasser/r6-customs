@@ -1,15 +1,15 @@
 import { Client as DiscordJsClient, ClientOptions as DiscordJsClientOptions } from 'discord.js';
 import Logger, { LogLevel, LogStrategy } from './utils/logger/logger';
 import ConsoleLogStrategy from './utils/logger/strategies/console.strategy';
-import Store from './stores/store';
-import Handler from './handlers/handler';
 import PiecesLoader from './utils/pieces/pieces-loader';
 import StrictLoadStrategy from './utils/pieces/strategies/strict.strategy';
-import EventStore from './stores/event.store';
+import Store from './structures/stores/store';
+import CommandStore from './structures/stores/command.store';
+import EventStore from './structures/stores/event.store';
+import GuardStore from './structures/stores/guard.store';
+import Handler from './handlers/handler';
 import EventHandler from './handlers/event.handler';
-import CommandStore from './stores/command.store';
 import CommandHandler from './handlers/command.handler';
-import GuardStore from './stores/guard.store';
 import Container from './container';
 
 export interface ClientOptions extends DiscordJsClientOptions {
