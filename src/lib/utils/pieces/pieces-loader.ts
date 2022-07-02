@@ -1,6 +1,6 @@
 import { Collection } from 'discord.js';
 import Piece from '../../structures/pieces/piece';
-import Container from '../../container';
+import Container from '../../structures/container';
 
 export type PieceName = 'command' | 'event' | 'guard';
 

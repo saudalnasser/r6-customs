@@ -1,4 +1,4 @@
-import Container from '../../container';
+import Container from '../container';
 
 export interface PieceOptions {
   name: string;

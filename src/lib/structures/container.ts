@@ -1,4 +1,4 @@
-import Logger from './utils/logger/logger';
+import Logger from '../utils/logger/logger';
 
 class Container {
   public logger!: Logger;

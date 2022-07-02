@@ -7,7 +7,7 @@ import {
   WebhookEditMessageOptions,
 } from 'discord.js';
 import Piece, { PieceOptions } from './piece';
-import Container from '../../container';
+import Container from '../container';
 
 type Response = string | MessagePayload | InteractionReplyOptions | WebhookEditMessageOptions;
 
