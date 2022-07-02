@@ -1,6 +1,6 @@
-import { StructureOptions } from '../structures/structure';
+import { PieceOptions } from '../pieces/piece';
 
-function ApplyOptions<T extends StructureOptions>(options: T) {
+function ApplyOptions<T extends PieceOptions>(options: T) {
   return function <E extends { new (...args: any[]): {} }>(target: E): any {
     return class extends target {
       public constructor(...args: any[]) {

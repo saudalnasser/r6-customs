@@ -1,11 +1,11 @@
 import Container from '../container';
 
-export interface StructureOptions {
+export interface PieceOptions {
   name: string;
   disabled?: boolean;
 }
 
-export default interface Structure {
-  options: StructureOptions;
+export default interface Piece {
+  options: PieceOptions;
   container: Container;
 }

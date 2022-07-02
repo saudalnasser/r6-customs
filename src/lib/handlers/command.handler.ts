@@ -1,4 +1,3 @@
-import { GuardResult } from './../structures/guard.structure';
 import {
   Client,
   CommandInteraction,
@@ -8,9 +7,9 @@ import {
 } from 'discord.js';
 import { yellowBright, greenBright, redBright } from 'colorette';
 import Handler from './handler';
-import Command from '../structures/command.structure';
+import Command from '../pieces/command.piece';
 import CommandStore from '../stores/command.store';
-import Guard from '../structures/guard.structure';
+import Guard, { GuardResult } from './../pieces/guard.piece';
 import GuardStore from '../stores/guard.store';
 import Container from '../container';
 
