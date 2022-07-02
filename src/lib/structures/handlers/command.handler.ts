@@ -29,7 +29,7 @@ class CommandHandler implements Handler {
           const command: Command | undefined = this.commandStore.get(interaction.commandName);
           if (!command) return;
 
-          const guards: Guard[] = this.guardStore.getMany(command.options.guards ?? []);
+          const guards: Guard[] = this.guardStore.getMany((command.options.guards ?? []) as string[]);
 
           for (const guard of guards) {
             const result: GuardResult = await guard.run({
