@@ -1,6 +1,5 @@
 import {
   ChatInputApplicationCommandData,
-  Client,
   CommandInteraction,
   CommandInteractionOptionResolver,
 } from 'discord.js';
@@ -13,7 +12,6 @@ export interface CommandOptions extends PieceOptions, ChatInputApplicationComman
 }
 
 export interface RunOptions {
-  client: Client;
   interaction: CommandInteraction;
   args: CommandInteractionOptionResolver;
 }

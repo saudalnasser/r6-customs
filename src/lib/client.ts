@@ -43,7 +43,7 @@ export default class Client extends DiscordJsClient {
   public async run(token: string): Promise<void> {
     try {
       for (const store of this.stores) await store.initialize(this.piecesLoader);
-      for (const handler of this.handlers) await handler.initialize(this, this.container);
+      for (const handler of this.handlers) await handler.initialize(this.container);
 
       await this.login(token);
     } catch (error) {
@@ -53,10 +53,12 @@ export default class Client extends DiscordJsClient {
   }
 
   private initializeContainer(options: ClientOptions): void {
+    this.container = new Container();
+
+    this.container.client = this;
+
     const logLevel: LogLevel = options.logLevel ?? LogLevel.Info;
     const logStrategy: LogStrategy = options.logStrategy ?? new ConsoleLogStrategy();
-
-    this.container = new Container();
     this.container.logger = new Logger(logLevel, logStrategy);
   }
 }

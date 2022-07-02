@@ -12,15 +12,15 @@ class EventHandler implements Handler {
     this.eventStore = eventStore;
   }
 
-  public async initialize(client: Client, container: Container): Promise<void> {
+  public async initialize(container: Container): Promise<void> {
     for (const event of this.eventStore.getIterable()) {
       const method: 'once' | 'on' = event.options.once ? 'once' : 'on';
 
-      client[method](event.options.name, async (...args): Promise<any> => {
+      container.client[method](event.options.name, async (...args): Promise<any> => {
         try {
           await event.run(...args);
         } catch (error: any) {
-          container.logger.error(this.generateErrorMessage(client, event, error));
+          container.logger.error(this.generateErrorMessage(container.client, event, error));
         }
       });
     }
