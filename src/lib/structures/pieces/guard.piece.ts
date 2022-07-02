@@ -1,5 +1,4 @@
 import {
-  Client,
   CommandInteraction,
   CommandInteractionOptionResolver,
   InteractionReplyOptions,
@@ -26,7 +25,6 @@ export interface GuardOptions extends PieceOptions {
 }
 
 export interface RunOptions {
-  client: Client;
   interaction: CommandInteraction;
   args: CommandInteractionOptionResolver;
 }

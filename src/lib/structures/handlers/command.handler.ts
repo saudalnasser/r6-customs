@@ -22,8 +22,8 @@ class CommandHandler implements Handler {
     this.guardStore = guardStore;
   }
 
-  public async initialize(client: Client, container: Container): Promise<void> {
-    client.on('interactionCreate', async (interaction) => {
+  public async initialize(container: Container): Promise<void> {
+    container.client.on('interactionCreate', async (interaction) => {
       if (interaction.isCommand()) {
         try {
           const command: Command | undefined = this.commandStore.get(interaction.commandName);
@@ -33,7 +33,6 @@ class CommandHandler implements Handler {
 
           for (const guard of guards) {
             const result: GuardResult = await guard.run({
-              client,
               interaction,
               args: interaction.options as CommandInteractionOptionResolver,
             });
@@ -51,14 +50,15 @@ class CommandHandler implements Handler {
           }
 
           await command.run({
-            client,
             interaction,
             args: interaction.options as CommandInteractionOptionResolver,
           });
 
-          container.logger.info(this.generateMessage('success', client, interaction));
+          container.logger.info(this.generateMessage('success', container.client, interaction));
         } catch (error: any) {
-          container.logger.error(this.generateMessage('error', client, interaction, error));
+          container.logger.error(
+            this.generateMessage('error', container.client, interaction, error)
+          );
         }
       }
     });
