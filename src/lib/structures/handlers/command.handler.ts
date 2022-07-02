@@ -6,30 +6,36 @@ import {
   InteractionDeferReplyOptions,
 } from 'discord.js';
 import { yellowBright, greenBright, redBright } from 'colorette';
+import Structure from '../structure';
 import Handler from './handler';
+import Container from '../container';
 import Command from '../pieces/command.piece';
 import CommandStore from '../stores/command.store';
 import Guard, { GuardResult } from '../pieces/guard.piece';
 import GuardStore from '../stores/guard.store';
-import Container from '../container';
 
-class CommandHandler implements Handler {
+class CommandHandler extends Structure implements Handler {
   private commandStore: CommandStore;
   private guardStore: GuardStore;
 
-  public constructor(commandStore: CommandStore, guardStore: GuardStore) {
+  public constructor(container: Container, commandStore: CommandStore, guardStore: GuardStore) {
+    super(container);
+
     this.commandStore = commandStore;
     this.guardStore = guardStore;
   }
 
-  public async initialize(container: Container): Promise<void> {
-    container.client.on('interactionCreate', async (interaction) => {
+  public async initialize(): Promise<void> {
+    const { container, commandStore, guardStore, generateMessage } = this;
+    const { client, logger } = container;
+
+    client.on('interactionCreate', async (interaction) => {
       if (interaction.isCommand()) {
         try {
-          const command: Command | undefined = this.commandStore.get(interaction.commandName);
+          const command: Command | undefined = commandStore.get(interaction.commandName);
           if (!command) return;
 
-          const guards: Guard[] = this.guardStore.getMany((command.options.guards ?? []) as string[]);
+          const guards: Guard[] = guardStore.getMany((command.options.guards ?? []) as string[]);
 
           for (const guard of guards) {
             const result: GuardResult = await guard.run({
@@ -54,11 +60,9 @@ class CommandHandler implements Handler {
             args: interaction.options as CommandInteractionOptionResolver,
           });
 
-          container.logger.info(this.generateMessage('success', container.client, interaction));
+          logger.info(generateMessage('success', client, interaction));
         } catch (error: any) {
-          container.logger.error(
-            this.generateMessage('error', container.client, interaction, error)
-          );
+          logger.error(generateMessage('error', client, interaction, error));
         }
       }
     });

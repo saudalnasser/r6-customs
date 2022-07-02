@@ -1,26 +1,32 @@
 import { Client, ClientEvents } from 'discord.js';
 import { redBright, yellowBright } from 'colorette';
+import Structure from '../structure';
 import Handler from './handler';
+import Container from '../container';
 import Event from '../pieces/event.piece';
 import EventStore from '../stores/event.store';
-import Container from '../container';
 
-class EventHandler implements Handler {
+class EventHandler extends Structure implements Handler {
   private eventStore: EventStore;
 
-  public constructor(eventStore: EventStore) {
+  public constructor(container: Container, eventStore: EventStore) {
+    super(container);
+
     this.eventStore = eventStore;
   }
 
-  public async initialize(container: Container): Promise<void> {
-    for (const event of this.eventStore.getIterable()) {
+  public async initialize(): Promise<void> {
+    const { container, eventStore, generateErrorMessage } = this;
+    const { client, logger } = container;
+
+    for (const event of eventStore.getIterable()) {
       const method: 'once' | 'on' = event.options.once ? 'once' : 'on';
 
-      container.client[method](event.options.name, async (...args): Promise<any> => {
+      client[method](event.options.name, async (...args): Promise<any> => {
         try {
           await event.run(...args);
         } catch (error: any) {
-          container.logger.error(this.generateErrorMessage(container.client, event, error));
+          logger.error(generateErrorMessage(client, event, error));
         }
       });
     }

@@ -1,7 +1,5 @@
-import Container from '../container';
-
 interface Handler {
-  initialize(container: Container): Promise<void>;
+  initialize(): Promise<void>;
 }
 
 export default Handler;

@@ -1,9 +1,10 @@
 import { Collection } from 'discord.js';
-import PiecesLoader from '../../utils/pieces/pieces-loader';
-import Command from '../pieces/command.piece';
+import Structure from '../structure';
 import Store from './store';
+import Command from '../pieces/command.piece';
+import PiecesLoader from '../../utils/pieces/pieces-loader';
 
-class CommandStore implements Store<Command> {
+class CommandStore extends Structure implements Store<Command> {
   private commands!: Collection<string, Command>;
 
   public async initialize(loader: PiecesLoader): Promise<void> {

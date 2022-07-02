@@ -30,20 +30,24 @@ export default class Client extends DiscordJsClient {
 
     this.piecesLoader = new PiecesLoader(new StrictLoadStrategy(), this.container);
 
-    const commandStore: CommandStore = new CommandStore();
-    const eventStore: EventStore = new EventStore();
-    const guardStore: GuardStore = new GuardStore();
+    const commandStore: CommandStore = new CommandStore(this.container);
+    const eventStore: EventStore = new EventStore(this.container);
+    const guardStore: GuardStore = new GuardStore(this.container);
     this.stores = [commandStore, eventStore, guardStore];
 
-    const commandHandler: CommandHandler = new CommandHandler(commandStore, guardStore);
-    const eventHandler: EventHandler = new EventHandler(eventStore);
+    const commandHandler: CommandHandler = new CommandHandler(
+      this.container,
+      commandStore,
+      guardStore
+    );
+    const eventHandler: EventHandler = new EventHandler(this.container, eventStore);
     this.handlers = [commandHandler, eventHandler];
   }
 
   public async run(token: string): Promise<void> {
     try {
       for (const store of this.stores) await store.initialize(this.piecesLoader);
-      for (const handler of this.handlers) await handler.initialize(this.container);
+      for (const handler of this.handlers) await handler.initialize();
 
       await this.login(token);
     } catch (error) {
