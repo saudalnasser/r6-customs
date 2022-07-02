@@ -6,7 +6,7 @@ import {
   MessagePayload,
   WebhookEditMessageOptions,
 } from 'discord.js';
-import Structure, { StructureOptions } from './structure';
+import Piece, { PieceOptions } from './piece';
 import Container from '../container';
 
 export enum Guards {}
@@ -23,7 +23,7 @@ export class GuardResult {
   }
 }
 
-export interface GuardOptions extends StructureOptions {
+export interface GuardOptions extends PieceOptions {
   deferReply?: boolean;
 }
 
@@ -33,7 +33,7 @@ export interface RunOptions {
   args: CommandInteractionOptionResolver;
 }
 
-export default abstract class Guard implements Structure {
+export default abstract class Guard implements Piece {
   public options: GuardOptions;
   public container: Container;
 

@@ -2,14 +2,14 @@ import 'dotenv/config';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
 import { ApplicationCommandDataResolvable, Collection } from 'discord.js';
-import StructuresLoader from '../lib/utils/structures/structures-loader';
-import StrictLoadStrategy from '../lib/utils/structures/strategies/strict.strategy';
+import PiecesLoader from '../lib/utils/pieces/pieces-loader';
+import StrictLoadStrategy from '../lib/utils/pieces/strategies/strict.strategy';
 import Container from '../lib/container';
-import Command from '../lib/structures/command.structure';
+import Command from '../lib/pieces/command.piece';
 import config from '../config';
 
 (async (): Promise<void> => {
-  const loader: StructuresLoader = new StructuresLoader(new StrictLoadStrategy(), new Container());
+  const loader: PiecesLoader = new PiecesLoader(new StrictLoadStrategy(), new Container());
 
   const commands: Collection<string, Command> = await loader.load<Command>('command');
 

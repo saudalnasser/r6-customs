@@ -1,13 +1,13 @@
 import { ClientEvents } from 'discord.js';
-import Structure, { StructureOptions } from './structure';
+import Piece, { PieceOptions } from './piece';
 import Container from '../container';
 
-export interface EventOptions extends StructureOptions {
+export interface EventOptions extends PieceOptions {
   name: keyof ClientEvents;
   once?: boolean;
 }
 
-export default abstract class Event<Key extends keyof ClientEvents> implements Structure {
+export default abstract class Event<Key extends keyof ClientEvents> implements Piece {
   public options: EventOptions;
   public container: Container;
 

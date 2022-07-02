@@ -4,11 +4,11 @@ import {
   CommandInteraction,
   CommandInteractionOptionResolver,
 } from 'discord.js';
-import { Guards } from './guard.structure';
-import Structure, { StructureOptions } from './structure';
+import { Guards } from './guard.piece';
+import Piece, { PieceOptions } from './piece';
 import Container from '../container';
 
-export interface CommandOptions extends StructureOptions, ChatInputApplicationCommandData {
+export interface CommandOptions extends PieceOptions, ChatInputApplicationCommandData {
   guards?: (keyof typeof Guards)[];
 }
 
@@ -18,7 +18,7 @@ export interface RunOptions {
   args: CommandInteractionOptionResolver;
 }
 
-export default abstract class Command implements Structure {
+export default abstract class Command implements Piece {
   public options: CommandOptions;
   public container: Container;
 

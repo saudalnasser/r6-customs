@@ -1,12 +1,12 @@
 import { Collection } from 'discord.js';
-import StructuresLoader from '../utils/structures/structures-loader';
-import Command from '../structures/command.structure';
+import PiecesLoader from '../utils/pieces/pieces-loader';
+import Command from '../pieces/command.piece';
 import Store from './store';
 
 class CommandStore implements Store<Command> {
   private commands!: Collection<string, Command>;
 
-  public async initialize(loader: StructuresLoader): Promise<void> {
+  public async initialize(loader: PiecesLoader): Promise<void> {
     this.commands = await loader.load<Command>('command');
   }
 

@@ -1,18 +1,18 @@
 import { Collection } from 'discord.js';
-import Structure from '../../structures/structure';
+import Piece from '../../pieces/piece';
 import Container from '../../container';
 
-export type StructureName = 'command' | 'event' | 'guard';
+export type PieceName = 'command' | 'event' | 'guard';
 
 export interface LoadStrategy {
-  load<T extends Structure>(
-    structureName: StructureName,
+  load<T extends Piece>(
+    pieceName: PieceName,
     collection: Collection<string, T>,
     container: Container
   ): Promise<void>;
 }
 
-export default class StructuresLoader {
+export default class PiecesLoader {
   private loadStrategy: LoadStrategy;
   private container: Container;
 
@@ -21,15 +21,13 @@ export default class StructuresLoader {
     this.container = container;
   }
 
-  public async load<T extends Structure>(
-    structureName: StructureName
-  ): Promise<Collection<string, T>> {
+  public async load<T extends Piece>(pieceName: PieceName): Promise<Collection<string, T>> {
     const collection: Collection<string, T> = new Collection();
 
     try {
-      await this.loadStrategy.load<T>(structureName, collection, this.container);
+      await this.loadStrategy.load<T>(pieceName, collection, this.container);
     } catch (error) {
-      this.container.logger.warn(`${structureName} store is empty.`);
+      this.container.logger.warn(`${pieceName} store is empty.`);
     }
 
     return collection;
