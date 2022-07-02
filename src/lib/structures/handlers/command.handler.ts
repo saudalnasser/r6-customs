@@ -11,7 +11,7 @@ import Command from '../pieces/command.piece';
 import CommandStore from '../stores/command.store';
 import Guard, { GuardResult } from '../pieces/guard.piece';
 import GuardStore from '../stores/guard.store';
-import Container from '../../container';
+import Container from '../container';
 
 class CommandHandler implements Handler {
   private commandStore: CommandStore;

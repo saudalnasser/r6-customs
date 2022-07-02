@@ -10,7 +10,7 @@ import GuardStore from './structures/stores/guard.store';
 import Handler from './structures/handlers/handler';
 import CommandHandler from './structures/handlers/command.handler';
 import EventHandler from './structures/handlers/event.handler';
-import Container from './container';
+import Container from './structures/container';
 
 export interface ClientOptions extends DiscordJsClientOptions {
   logLevel?: LogLevel;

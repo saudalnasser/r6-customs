@@ -4,7 +4,7 @@ import { Routes } from 'discord-api-types/v10';
 import { ApplicationCommandDataResolvable, Collection } from 'discord.js';
 import PiecesLoader from '../lib/utils/pieces/pieces-loader';
 import StrictLoadStrategy from '../lib/utils/pieces/strategies/strict.strategy';
-import Container from '../lib/container';
+import Container from '../lib/structures/container';
 import Command from '../lib/structures/pieces/command.piece';
 import config from '../config';
 

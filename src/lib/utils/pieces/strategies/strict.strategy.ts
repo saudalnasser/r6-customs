@@ -3,7 +3,7 @@ import { readdirSync } from 'fs';
 import { join } from 'path';
 import { LoadStrategy, PieceName } from '../pieces-loader';
 import Piece from '../../../structures/pieces/piece';
-import Container from '../../../container';
+import Container from '../../../structures/container';
 
 class StrictLoadStrategy implements LoadStrategy {
   public async load<T extends Piece>(

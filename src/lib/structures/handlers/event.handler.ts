@@ -3,7 +3,7 @@ import { redBright, yellowBright } from 'colorette';
 import Handler from './handler';
 import Event from '../pieces/event.piece';
 import EventStore from '../stores/event.store';
-import Container from '../../container';
+import Container from '../container';
 
 class EventHandler implements Handler {
   private eventStore: EventStore;
