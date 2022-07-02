@@ -60,7 +60,7 @@ class CommandHandler extends Structure implements Handler {
             args: interaction.options as CommandInteractionOptionResolver,
           });
 
-          logger.info(generateMessage('success', client, interaction));
+          logger.debug(generateMessage('success', client, interaction));
         } catch (error: any) {
           logger.error(generateMessage('error', client, interaction, error));
         }
