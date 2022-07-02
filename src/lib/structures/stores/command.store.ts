@@ -1,6 +1,6 @@
 import { Collection } from 'discord.js';
-import PiecesLoader from '../utils/pieces/pieces-loader';
-import Command from '../structures/pieces/command.piece';
+import PiecesLoader from '../../utils/pieces/pieces-loader';
+import Command from '../pieces/command.piece';
 import Store from './store';
 
 class CommandStore implements Store<Command> {
