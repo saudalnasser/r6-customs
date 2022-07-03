@@ -1,14 +1,12 @@
 import { ClientEvents, Collection } from 'discord.js';
-import Structure from '../structure';
 import Store from './store';
 import Event from '../pieces/event.piece';
-import PiecesLoader from '../../utils/pieces/pieces-loader';
 
-class EventStore extends Structure implements Store<Event<keyof ClientEvents>> {
+class EventStore extends Store<Event<keyof ClientEvents>> {
   private events!: Collection<string, Event<keyof ClientEvents>>;
 
-  public async initialize(loader: PiecesLoader): Promise<void> {
-    this.events = await loader.load<Event<keyof ClientEvents>>('event');
+  public async initialize(): Promise<void> {
+    this.events = await this.piecesLoader.load<Event<keyof ClientEvents>>('event');
   }
 
   public get(name: string): Event<keyof ClientEvents> | undefined {
