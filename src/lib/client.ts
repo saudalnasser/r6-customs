@@ -18,9 +18,9 @@ export interface ClientOptions extends DiscordJsClientOptions {
 }
 
 export default class Client extends DiscordJsClient {
-  private handlers: Handler[];
-  private stores: Store<any>[];
-  private piecesLoader: PiecesLoader;
+  private handlers!: Handler[];
+  private stores!: Store<any>[];
+  private piecesLoader!: PiecesLoader;
   private container!: Container;
 
   public constructor(options: ClientOptions) {
@@ -28,20 +28,7 @@ export default class Client extends DiscordJsClient {
 
     this.initializeContainer(options);
 
-    this.piecesLoader = new PiecesLoader(new StrictLoadStrategy(), this.container);
-
-    const commandStore: CommandStore = new CommandStore(this.container);
-    const eventStore: EventStore = new EventStore(this.container);
-    const guardStore: GuardStore = new GuardStore(this.container);
-    this.stores = [commandStore, eventStore, guardStore];
-
-    const commandHandler: CommandHandler = new CommandHandler(
-      this.container,
-      commandStore,
-      guardStore
-    );
-    const eventHandler: EventHandler = new EventHandler(this.container, eventStore);
-    this.handlers = [commandHandler, eventHandler];
+    this.initializeStructures();
   }
 
   public async run(token: string): Promise<void> {
@@ -64,5 +51,22 @@ export default class Client extends DiscordJsClient {
     const logLevel: LogLevel = options.logLevel ?? LogLevel.Info;
     const logStrategy: LogStrategy = options.logStrategy ?? new ConsoleLogStrategy();
     this.container.logger = new Logger(logLevel, logStrategy);
+  }
+
+  private initializeStructures(): void {
+    this.piecesLoader = new PiecesLoader(new StrictLoadStrategy(), this.container);
+
+    const commandStore: CommandStore = new CommandStore(this.container);
+    const eventStore: EventStore = new EventStore(this.container);
+    const guardStore: GuardStore = new GuardStore(this.container);
+    this.stores = [commandStore, eventStore, guardStore];
+
+    const commandHandler: CommandHandler = new CommandHandler(
+      this.container,
+      commandStore,
+      guardStore
+    );
+    const eventHandler: EventHandler = new EventHandler(this.container, eventStore);
+    this.handlers = [commandHandler, eventHandler];
   }
 }
