@@ -1,4 +1,5 @@
 import { Collection } from 'discord.js';
+import { loadWarnMessage } from '../logger/messages/pieces-loader.messages';
 import Piece from '../../structures/pieces/piece';
 import Container from '../../structures/container';
 
@@ -27,7 +28,7 @@ export default class PiecesLoader {
     try {
       await this.loadStrategy.load<T>(pieceName, collection, this.container);
     } catch (error) {
-      this.container.logger.warn(`${pieceName} store is empty.`);
+      this.container.logger.warn(loadWarnMessage(pieceName));
     }
 
     return collection;

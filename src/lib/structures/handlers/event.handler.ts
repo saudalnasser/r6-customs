@@ -1,9 +1,7 @@
-import { ClientEvents } from 'discord.js';
-import { redBright, yellowBright } from 'colorette';
+import { eventExecutionErrorMessage } from '../../utils/logger/messages/event-handler.messages';
 import Structure from '../structure';
 import Handler from './handler';
 import Container from '../container';
-import Event from '../pieces/event.piece';
 import EventStore from '../stores/event.store';
 
 class EventHandler extends Structure implements Handler {
@@ -16,7 +14,7 @@ class EventHandler extends Structure implements Handler {
   }
 
   public async initialize(): Promise<void> {
-    const { container, eventStore, generateErrorMessage } = this;
+    const { container, eventStore } = this;
     const { client, logger } = container;
 
     for (const event of eventStore.getIterable()) {
@@ -26,23 +24,10 @@ class EventHandler extends Structure implements Handler {
         try {
           await event.run(...args);
         } catch (error: any) {
-          logger.error(generateErrorMessage(event, error));
+          logger.error(eventExecutionErrorMessage(event, error));
         }
       });
     }
-  }
-
-  private generateErrorMessage(event: Event<keyof ClientEvents>, error: Error): string {
-    const eventName: string = `${yellowBright(event.options.name)}`;
-    const errorMessage: string = `${yellowBright(error?.message ?? '')}`;
-
-    const openBracket: string = redBright('<');
-    const closeBracket: string = redBright('>');
-
-    const styledEventName: string = `${openBracket}${eventName}${closeBracket}`;
-    const styledErrorMessage: string = `${redBright('error:')} ${errorMessage}`;
-
-    return `${styledEventName} ${styledErrorMessage}`;
   }
 }
 
