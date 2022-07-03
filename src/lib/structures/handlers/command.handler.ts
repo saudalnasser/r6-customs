@@ -26,18 +26,24 @@ class CommandHandler extends Structure implements Handler {
   }
 
   public async initialize(): Promise<void> {
-    const { container, commandStore, guardStore, generateMessage } = this;
+    const {
+      container,
+      commandStore,
+      guardStore,
+      generateCommandExecutionMessage,
+      generateGuardExecutionMessage,
+    } = this;
     const { client, logger } = container;
 
     client.on('interactionCreate', async (interaction) => {
       if (interaction.isCommand()) {
-        try {
-          const command: Command | undefined = commandStore.get(interaction.commandName);
-          if (!command) return;
+        const command: Command | undefined = commandStore.get(interaction.commandName);
+        if (!command) return;
 
-          const guards: Guard[] = guardStore.getMany((command.options.guards ?? []) as string[]);
+        const guards: Guard[] = guardStore.getMany((command.options.guards ?? []) as string[]);
 
-          for (const guard of guards) {
+        for (const guard of guards) {
+          try {
             const result: GuardResult = await guard.run({
               interaction,
               args: interaction.options as CommandInteractionOptionResolver,
@@ -53,22 +59,26 @@ class CommandHandler extends Structure implements Handler {
 
               return;
             }
+          } catch (error: any) {
+            logger.error(generateGuardExecutionMessage(client, interaction, guard, error));
           }
+        }
 
+        try {
           await command.run({
             interaction,
             args: interaction.options as CommandInteractionOptionResolver,
           });
 
-          logger.debug(generateMessage('success', client, interaction));
+          logger.debug(generateCommandExecutionMessage('success', client, interaction));
         } catch (error: any) {
-          logger.error(generateMessage('error', client, interaction, error));
+          logger.error(generateCommandExecutionMessage('error', client, interaction, error));
         }
       }
     });
   }
 
-  private generateMessage(
+  private generateCommandExecutionMessage(
     type: 'success' | 'error',
     client: Client,
     interaction: CommandInteraction,
@@ -95,6 +105,32 @@ class CommandHandler extends Structure implements Handler {
       case 'error':
         return `${shard} ${styledMember} ${styledCommand} ${styledChannel} ${styledErrorMessage}`;
     }
+  }
+
+  private generateGuardExecutionMessage(
+    client: Client,
+    interaction: CommandInteraction,
+    guard: Guard,
+    error?: Error
+  ): string {
+    const shard: string = `[${yellowBright(client.shard?.count ?? 0)}]`;
+    const member: string = `${yellowBright(interaction.member?.user.username ?? '')}`;
+    const guardName: string = `${yellowBright(guard.options.name)}`;
+    const command: string = `${yellowBright(interaction.commandName)}`;
+    const channel: string = `${yellowBright((interaction.channel as GuildBasedChannel).name)}`;
+    const errorMessage: string = `${yellowBright(error?.message ?? '')}`;
+
+    const at: string = redBright('@');
+    const openBracket: string = redBright('<');
+    const closeBracket: string = redBright('>');
+
+    const styledMember: string = `${at}${member}`;
+    const styledGuard: string = `${openBracket}${guardName}${closeBracket}`;
+    const styledCommand: string = `${openBracket}${command}${closeBracket}`;
+    const styledChannel: string = `${openBracket}${channel}${closeBracket}`;
+    const styledErrorMessage: string = `${redBright('error:')} ${errorMessage}`;
+
+    return `${shard} ${styledMember} ${styledGuard} ${styledCommand} ${styledChannel} ${styledErrorMessage}`;
   }
 }
 
