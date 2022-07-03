@@ -1,10 +1,9 @@
+import { CommandInteractionOptionResolver, InteractionDeferReplyOptions } from 'discord.js';
 import {
-  CommandInteraction,
-  CommandInteractionOptionResolver,
-  GuildBasedChannel,
-  InteractionDeferReplyOptions,
-} from 'discord.js';
-import { yellowBright, greenBright, redBright } from 'colorette';
+  commandExecutionSuccessMessage,
+  commandExecutionErrorMessage,
+  guardExecutionErrorMessage,
+} from '../../utils/logger/messages/command-handler.messages';
 import Structure from '../structure';
 import Handler from './handler';
 import Container from '../container';
@@ -25,13 +24,7 @@ class CommandHandler extends Structure implements Handler {
   }
 
   public async initialize(): Promise<void> {
-    const {
-      container,
-      commandStore,
-      guardStore,
-      generateCommandExecutionMessage,
-      generateGuardExecutionMessage,
-    } = this;
+    const { container, commandStore, guardStore } = this;
     const { client, logger } = container;
 
     client.on('interactionCreate', async (interaction) => {
@@ -59,7 +52,7 @@ class CommandHandler extends Structure implements Handler {
               return;
             }
           } catch (error: any) {
-            logger.error(generateGuardExecutionMessage(interaction, guard, error));
+            logger.error(guardExecutionErrorMessage(interaction, guard, error));
           }
         }
 
@@ -69,63 +62,12 @@ class CommandHandler extends Structure implements Handler {
             args: interaction.options as CommandInteractionOptionResolver,
           });
 
-          logger.debug(generateCommandExecutionMessage('success', interaction));
+          logger.debug(commandExecutionSuccessMessage(interaction));
         } catch (error: any) {
-          logger.error(generateCommandExecutionMessage('error', interaction, error));
+          logger.error(commandExecutionErrorMessage(interaction, error));
         }
       }
     });
-  }
-
-  private generateCommandExecutionMessage(
-    type: 'success' | 'error',
-    interaction: CommandInteraction,
-    error?: Error
-  ): string {
-    const member: string = `${yellowBright(interaction.member?.user.username ?? '')}`;
-    const command: string = `${yellowBright(interaction.commandName)}`;
-    const channel: string = `${yellowBright((interaction.channel as GuildBasedChannel).name)}`;
-    const errorMessage: string = `${yellowBright(error?.message ?? '')}`;
-
-    const at: string = type === 'success' ? greenBright('@') : redBright('@');
-    const openBracket: string = type === 'success' ? greenBright('<') : redBright('<');
-    const closeBracket: string = type === 'success' ? greenBright('>') : redBright('>');
-
-    const styledMember: string = `${at}${member}`;
-    const styledCommand: string = `${openBracket}${command}${closeBracket}`;
-    const styledChannel: string = `${openBracket}${channel}${closeBracket}`;
-    const styledErrorMessage: string = `${redBright('error:')} ${errorMessage}`;
-
-    switch (type) {
-      case 'success':
-        return `${styledMember} ${styledCommand} ${styledChannel}`;
-      case 'error':
-        return `${styledMember} ${styledCommand} ${styledChannel} ${styledErrorMessage}`;
-    }
-  }
-
-  private generateGuardExecutionMessage(
-    interaction: CommandInteraction,
-    guard: Guard,
-    error?: Error
-  ): string {
-    const member: string = `${yellowBright(interaction.member?.user.username ?? '')}`;
-    const guardName: string = `${yellowBright(guard.options.name)}`;
-    const command: string = `${yellowBright(interaction.commandName)}`;
-    const channel: string = `${yellowBright((interaction.channel as GuildBasedChannel).name)}`;
-    const errorMessage: string = `${yellowBright(error?.message ?? '')}`;
-
-    const at: string = redBright('@');
-    const openBracket: string = redBright('<');
-    const closeBracket: string = redBright('>');
-
-    const styledMember: string = `${at}${member}`;
-    const styledGuard: string = `${openBracket}${guardName}${closeBracket}`;
-    const styledCommand: string = `${openBracket}${command}${closeBracket}`;
-    const styledChannel: string = `${openBracket}${channel}${closeBracket}`;
-    const styledErrorMessage: string = `${redBright('error:')} ${errorMessage}`;
-
-    return `${styledMember} ${styledGuard} ${styledCommand} ${styledChannel} ${styledErrorMessage}`;
   }
 }
 
