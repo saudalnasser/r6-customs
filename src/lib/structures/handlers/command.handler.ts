@@ -1,5 +1,4 @@
 import {
-  Client,
   CommandInteraction,
   CommandInteractionOptionResolver,
   GuildBasedChannel,
@@ -60,7 +59,7 @@ class CommandHandler extends Structure implements Handler {
               return;
             }
           } catch (error: any) {
-            logger.error(generateGuardExecutionMessage(client, interaction, guard, error));
+            logger.error(generateGuardExecutionMessage(interaction, guard, error));
           }
         }
 
@@ -70,9 +69,9 @@ class CommandHandler extends Structure implements Handler {
             args: interaction.options as CommandInteractionOptionResolver,
           });
 
-          logger.debug(generateCommandExecutionMessage('success', client, interaction));
+          logger.debug(generateCommandExecutionMessage('success', interaction));
         } catch (error: any) {
-          logger.error(generateCommandExecutionMessage('error', client, interaction, error));
+          logger.error(generateCommandExecutionMessage('error', interaction, error));
         }
       }
     });
@@ -80,11 +79,9 @@ class CommandHandler extends Structure implements Handler {
 
   private generateCommandExecutionMessage(
     type: 'success' | 'error',
-    client: Client,
     interaction: CommandInteraction,
     error?: Error
   ): string {
-    const shard: string = `[${yellowBright(client.shard?.count ?? 0)}]`;
     const member: string = `${yellowBright(interaction.member?.user.username ?? '')}`;
     const command: string = `${yellowBright(interaction.commandName)}`;
     const channel: string = `${yellowBright((interaction.channel as GuildBasedChannel).name)}`;
@@ -101,19 +98,17 @@ class CommandHandler extends Structure implements Handler {
 
     switch (type) {
       case 'success':
-        return `${shard} ${styledMember} ${styledCommand} ${styledChannel}`;
+        return `${styledMember} ${styledCommand} ${styledChannel}`;
       case 'error':
-        return `${shard} ${styledMember} ${styledCommand} ${styledChannel} ${styledErrorMessage}`;
+        return `${styledMember} ${styledCommand} ${styledChannel} ${styledErrorMessage}`;
     }
   }
 
   private generateGuardExecutionMessage(
-    client: Client,
     interaction: CommandInteraction,
     guard: Guard,
     error?: Error
   ): string {
-    const shard: string = `[${yellowBright(client.shard?.count ?? 0)}]`;
     const member: string = `${yellowBright(interaction.member?.user.username ?? '')}`;
     const guardName: string = `${yellowBright(guard.options.name)}`;
     const command: string = `${yellowBright(interaction.commandName)}`;
@@ -130,7 +125,7 @@ class CommandHandler extends Structure implements Handler {
     const styledChannel: string = `${openBracket}${channel}${closeBracket}`;
     const styledErrorMessage: string = `${redBright('error:')} ${errorMessage}`;
 
-    return `${shard} ${styledMember} ${styledGuard} ${styledCommand} ${styledChannel} ${styledErrorMessage}`;
+    return `${styledMember} ${styledGuard} ${styledCommand} ${styledChannel} ${styledErrorMessage}`;
   }
 }
 
