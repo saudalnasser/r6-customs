@@ -1,4 +1,4 @@
-import { Client, ClientEvents } from 'discord.js';
+import { ClientEvents } from 'discord.js';
 import { redBright, yellowBright } from 'colorette';
 import Structure from '../structure';
 import Handler from './handler';
@@ -26,18 +26,13 @@ class EventHandler extends Structure implements Handler {
         try {
           await event.run(...args);
         } catch (error: any) {
-          logger.error(generateErrorMessage(client, event, error));
+          logger.error(generateErrorMessage(event, error));
         }
       });
     }
   }
 
-  private generateErrorMessage(
-    client: Client,
-    event: Event<keyof ClientEvents>,
-    error: Error
-  ): string {
-    const shard: string = `[${yellowBright(client.shard?.count ?? 0)}]`;
+  private generateErrorMessage(event: Event<keyof ClientEvents>, error: Error): string {
     const eventName: string = `${yellowBright(event.options.name)}`;
     const errorMessage: string = `${yellowBright(error?.message ?? '')}`;
 
@@ -47,7 +42,7 @@ class EventHandler extends Structure implements Handler {
     const styledEventName: string = `${openBracket}${eventName}${closeBracket}`;
     const styledErrorMessage: string = `${redBright('error:')} ${errorMessage}`;
 
-    return `${shard} ${styledEventName} ${styledErrorMessage}`;
+    return `${styledEventName} ${styledErrorMessage}`;
   }
 }
 
