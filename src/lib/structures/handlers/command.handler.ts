@@ -1,15 +1,19 @@
-import { CommandInteractionOptionResolver, InteractionDeferReplyOptions } from 'discord.js';
+import {
+  CommandInteraction,
+  CommandInteractionOptionResolver,
+  InteractionDeferReplyOptions,
+} from 'discord.js';
 import {
   commandExecutionSuccessMessage,
   commandExecutionErrorMessage,
   guardExecutionErrorMessage,
 } from '../../utils/logger/messages/command-handler.messages';
+import { GuardResult, RunOptions as GuardRunOptions } from '../pieces/guard.piece';
 import Structure from '../structure';
 import Handler from './handler';
 import Container from '../container';
-import Command from '../pieces/command.piece';
+import Command, { RunOptions as CommandRunOptions } from '../pieces/command.piece';
 import CommandStore from '../stores/command.store';
-import Guard, { GuardResult } from '../pieces/guard.piece';
 import GuardStore from '../stores/guard.store';
 
 class CommandHandler extends Structure implements Handler {
@@ -24,50 +28,64 @@ class CommandHandler extends Structure implements Handler {
   }
 
   public async initialize(): Promise<void> {
-    const { container, commandStore, guardStore } = this;
-    const { client, logger } = container;
-
-    client.on('interactionCreate', async (interaction) => {
+    this.container.client.on('interactionCreate', async (interaction) => {
       if (interaction.isCommand()) {
-        const command: Command | undefined = commandStore.get(interaction.commandName);
+        const command: Command | undefined = this.commandStore.get(interaction.commandName);
         if (!command) return;
 
-        const guards: Guard[] = guardStore.getMany((command.options.guards ?? []) as string[]);
+        const runOptions: GuardRunOptions | CommandRunOptions = {
+          interaction,
+          args: interaction.options as CommandInteractionOptionResolver,
+        };
 
-        for (const guard of guards) {
-          try {
-            const result: GuardResult = await guard.run({
-              interaction,
-              args: interaction.options as CommandInteractionOptionResolver,
-            });
+        const guards: string[] = (command.options.guards ?? []) as string[];
+        const passGuards: boolean = await this.runGuards(guards, runOptions, interaction);
+        if (!passGuards) return;
 
-            if (!result.ok) {
-              if (guard.options.deferReply) {
-                await interaction.deferReply(result.response as InteractionDeferReplyOptions);
-                await interaction.editReply(result.response);
-              } else {
-                await interaction.reply(result.response);
-              }
-
-              return;
-            }
-          } catch (error: any) {
-            logger.error(guardExecutionErrorMessage(interaction, guard, error));
-          }
-        }
-
-        try {
-          await command.run({
-            interaction,
-            args: interaction.options as CommandInteractionOptionResolver,
-          });
-
-          logger.debug(commandExecutionSuccessMessage(interaction));
-        } catch (error: any) {
-          logger.error(commandExecutionErrorMessage(interaction, error));
-        }
+        await this.runCommand(command, runOptions, interaction);
       }
     });
+  }
+
+  private async runGuards(
+    guards: string[],
+    runOptions: GuardRunOptions,
+    interaction: CommandInteraction
+  ): Promise<boolean> {
+    for (const guard of this.guardStore.getMany(guards)) {
+      try {
+        const result: GuardResult = await guard.run(runOptions);
+
+        if (!result.ok) {
+          if (guard.options.deferReply) {
+            await interaction.deferReply(result.response as InteractionDeferReplyOptions);
+            await interaction.editReply(result.response);
+          } else {
+            await interaction.reply(result.response);
+          }
+
+          return false;
+        }
+      } catch (error: any) {
+        this.container.logger.error(guardExecutionErrorMessage(interaction, guard, error));
+      }
+    }
+
+    return true;
+  }
+
+  private async runCommand(
+    command: Command,
+    runOptions: CommandRunOptions,
+    interaction: CommandInteraction
+  ): Promise<void> {
+    try {
+      await command.run(runOptions);
+
+      this.container.logger.debug(commandExecutionSuccessMessage(interaction));
+    } catch (error: any) {
+      this.container.logger.error(commandExecutionErrorMessage(interaction, error));
+    }
   }
 }
 
