@@ -14,17 +14,14 @@ class EventHandler extends Structure implements Handler {
   }
 
   public async initialize(): Promise<void> {
-    const { container, eventStore } = this;
-    const { client, logger } = container;
-
-    for (const event of eventStore.getIterable()) {
+    for (const event of this.eventStore.getIterable()) {
       const method: 'once' | 'on' = event.options.once ? 'once' : 'on';
 
-      client[method](event.options.name, async (...args): Promise<any> => {
+      this.container.client[method](event.options.name, async (...args): Promise<any> => {
         try {
           await event.run(...args);
         } catch (error: any) {
-          logger.error(eventExecutionErrorMessage(event, error));
+          this.container.logger.error(eventExecutionErrorMessage(event, error));
         }
       });
     }
