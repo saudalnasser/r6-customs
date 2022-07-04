@@ -4,9 +4,9 @@ import { createColors } from 'colorette';
 import Client, { ClientOptions } from './lib/client';
 import config from './config';
 
-config.validate();
-
 createColors({ useColor: true });
+
+config.validate();
 
 const options: ClientOptions = {
   shards: 'auto',
