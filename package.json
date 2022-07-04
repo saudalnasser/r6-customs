@@ -29,7 +29,8 @@
     "@discordjs/rest": "^0.5.0",
     "colorette": "^2.0.19",
     "discord.js": "^13.8.1",
-    "dotenv": "^16.0.1"
+    "dotenv": "^16.0.1",
+    "mongoose": "^6.4.2"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
