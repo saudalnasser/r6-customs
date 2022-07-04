@@ -74,6 +74,8 @@ class CommandHandler extends Structure implements Handler {
 
       this.container.logger.debug(commandExecutionSuccessMessage(interaction));
     } catch (error: any) {
+      await interaction.reply({ content: 'unexpected error occurred!', ephemeral: true });
+
       this.container.logger.error(commandExecutionErrorMessage(interaction, error));
     }
   }
