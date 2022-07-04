@@ -3,13 +3,12 @@ import {
   CommandInteractionOptionResolver,
   InteractionReplyOptions,
   MessagePayload,
-  WebhookEditMessageOptions,
 } from 'discord.js';
 import Structure from '../structure';
 import Container from '../container';
 import Piece, { PieceOptions } from './piece';
 
-type Response = string | MessagePayload | InteractionReplyOptions | WebhookEditMessageOptions;
+type Response = string | MessagePayload | InteractionReplyOptions;
 
 export class GuardResult {
   public ok: boolean;
@@ -21,9 +20,7 @@ export class GuardResult {
   }
 }
 
-export interface GuardOptions extends PieceOptions {
-  deferReply?: boolean;
-}
+export interface GuardOptions extends PieceOptions {}
 
 export interface RunOptions {
   interaction: CommandInteraction;

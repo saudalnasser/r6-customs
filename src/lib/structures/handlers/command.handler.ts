@@ -1,8 +1,4 @@
-import {
-  CommandInteraction,
-  CommandInteractionOptionResolver,
-  InteractionDeferReplyOptions,
-} from 'discord.js';
+import { CommandInteraction, CommandInteractionOptionResolver } from 'discord.js';
 import {
   commandExecutionSuccessMessage,
   commandExecutionErrorMessage,
@@ -55,17 +51,11 @@ class CommandHandler extends Structure implements Handler {
     for (const guard of this.guardStore.getMany(guards)) {
       try {
         const result: GuardResult = await guard.run(runOptions);
+        if (result.ok) continue;
 
-        if (!result.ok) {
-          if (guard.options.deferReply) {
-            await interaction.deferReply(result.response as InteractionDeferReplyOptions);
-            await interaction.editReply(result.response);
-          } else {
-            await interaction.reply(result.response);
-          }
+        await interaction.reply(result.response);
 
-          return false;
-        }
+        return false;
       } catch (error: any) {
         this.container.logger.error(guardExecutionErrorMessage(interaction, guard, error));
       }
