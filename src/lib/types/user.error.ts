@@ -1,6 +1,10 @@
 /* eslint-disable no-unused-vars */
 
-export enum Identifiers {}
+export enum Identifiers {
+  Registered,
+  UplayDoesNotExist,
+  UplayLinkedToAnotherPlayer,
+}
 
 export default class UserError extends Error {
   public readonly identifier: keyof typeof Identifiers;
