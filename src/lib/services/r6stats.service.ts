@@ -7,9 +7,9 @@ class R6StatsService extends Service {
   private api: R6StatsAPI;
   private platform: Platform;
 
-  public constructor(container: Container, apiKey: string) {
+  public constructor(container: Container, baseUrl: string, apiKey: string) {
     super(container);
-    this.api = new R6StatsAPI({ baseUrl: 'https://api2.r6stats.com/public-api/', apiKey });
+    this.api = new R6StatsAPI({ baseUrl, apiKey });
     this.platform = 'pc';
   }
 

@@ -20,6 +20,7 @@ export interface ClientOptions extends DiscordJsClientOptions {
   token: string;
   dbUri: string;
   r6apiKey: string;
+  r6apiBaseUrl: string;
   logLevel?: LogLevel;
   logStrategy?: LogStrategy;
   environment: string;
@@ -69,7 +70,12 @@ export default class Client extends DiscordJsClient {
     const logStrategy: LogStrategy = this.options.logStrategy ?? new ConsoleLogStrategy();
     this.container.logger = new Logger(logLevel, logStrategy);
 
-    this.container.r6statsService = new R6StatsService(this.container, this.options.r6apiKey);
+    this.container.r6statsService = new R6StatsService(
+      this.container,
+      this.options.r6apiBaseUrl,
+      this.options.r6apiKey
+    );
+
     this.container.playerService = new PlayerService(this.container);
   }
 

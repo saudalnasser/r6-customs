@@ -12,6 +12,7 @@ const options: ClientOptions = {
   token: config.token,
   dbUri: config.dbUri,
   r6apiKey: config.r6apiKey,
+  r6apiBaseUrl: config.r6apiBaseUrl,
   shards: 'auto',
   intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_MESSAGES'],
   logLevel: config.environment === 'development' ? LogLevel.Debug : LogLevel.Info,
