@@ -14,6 +14,7 @@ import EventHandler from './structures/handlers/event.handler';
 import Container from './structures/container';
 import mongoose from 'mongoose';
 import R6StatsService from './services/r6stats.service';
+import PlayerService from './services/player.service';
 
 export interface ClientOptions extends DiscordJsClientOptions {
   token: string;
@@ -69,6 +70,7 @@ export default class Client extends DiscordJsClient {
     this.container.logger = new Logger(logLevel, logStrategy);
 
     this.container.r6statsService = new R6StatsService(this.container, this.options.r6apiKey);
+    this.container.playerService = new PlayerService(this.container);
   }
 
   private initializeStructures(): void {
