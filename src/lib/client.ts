@@ -13,10 +13,12 @@ import CommandHandler from './structures/handlers/command.handler';
 import EventHandler from './structures/handlers/event.handler';
 import Container from './structures/container';
 import mongoose from 'mongoose';
+import R6StatsService from './services/r6stats.service';
 
 export interface ClientOptions extends DiscordJsClientOptions {
   token: string;
   dbUri: string;
+  r6apiKey: string;
   logLevel?: LogLevel;
   logStrategy?: LogStrategy;
   environment: string;
@@ -34,7 +36,7 @@ export default class Client extends DiscordJsClient {
 
     this.options = options;
 
-    this.initializeContainer(options);
+    this.initializeContainer();
 
     this.initializeStructures();
   }
@@ -57,14 +59,16 @@ export default class Client extends DiscordJsClient {
     }
   }
 
-  private initializeContainer(options: ClientOptions): void {
+  private initializeContainer(): void {
     this.container = new Container();
 
     this.container.client = this;
 
-    const logLevel: LogLevel = options.logLevel ?? LogLevel.Info;
-    const logStrategy: LogStrategy = options.logStrategy ?? new ConsoleLogStrategy();
+    const logLevel: LogLevel = this.options.logLevel ?? LogLevel.Info;
+    const logStrategy: LogStrategy = this.options.logStrategy ?? new ConsoleLogStrategy();
     this.container.logger = new Logger(logLevel, logStrategy);
+
+    this.container.r6statsService = new R6StatsService(this.container, this.options.r6apiKey);
   }
 
   private initializeStructures(): void {

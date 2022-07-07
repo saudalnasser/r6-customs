@@ -1,7 +1,7 @@
-const { NODE_ENV, TOKEN, CLIENT_ID, GUILD_ID, DB_URI } = process.env;
+const { NODE_ENV, TOKEN, CLIENT_ID, GUILD_ID, DB_URI, R6API_KEY } = process.env;
 
 function validate(): void {
-  if (!NODE_ENV || !TOKEN || !CLIENT_ID || !GUILD_ID || !DB_URI) {
+  if (!NODE_ENV || !TOKEN || !CLIENT_ID || !GUILD_ID || !DB_URI || !R6API_KEY) {
     throw new Error('Missing environment variables');
   }
 }
@@ -12,6 +12,7 @@ interface Config {
   clientId: string;
   guildId: string;
   dbUri: string;
+  r6apiKey: string;
   validate(): void;
 }
 
@@ -21,6 +22,7 @@ const config: Config = {
   clientId: CLIENT_ID ?? '<clientId>',
   guildId: GUILD_ID ?? '<guildId>',
   dbUri: DB_URI ?? '<dbUri>',
+  r6apiKey: R6API_KEY ?? '<r6apiKey>',
   validate,
 };
 
