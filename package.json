@@ -13,15 +13,14 @@
   "version": "0.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
-    "start:dev": "ts-node-dev src/index.ts",
-    "start:prod": "tsc && node dist/index.js",
+    "start": "tsc && node dist/index.js",
+    "start:dev": "ts-node-dev --inspect=9229 --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "build:watch": "tsc -w",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
-    "deploy:global": "tsc && node dist/scripts/deploy-commands-global.js",
-    "deploy:guild": "tsc && node dist/scripts/deploy-commands-guild.js"
+    "deploy:guild": "tsc && node dist/scripts/deploy-commands-guild.js",
+    "deploy:global": "tsc && node dist/scripts/deploy-commands-global.js"
   },
   "engines": {
     "node": ">=16.15.1"
