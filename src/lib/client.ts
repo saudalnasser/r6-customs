@@ -1,4 +1,5 @@
 import { Client as DiscordJsClient, ClientOptions as DiscordJsClientOptions } from 'discord.js';
+import { databaseReadyMessage } from './utils/logger/messages/client.messages';
 import Logger, { LogLevel, LogStrategy } from './utils/logger/logger';
 import ConsoleLogStrategy from './utils/logger/strategies/console.strategy';
 import PiecesLoader from './utils/pieces/pieces-loader';
@@ -11,13 +12,18 @@ import Handler from './structures/handlers/handler';
 import CommandHandler from './structures/handlers/command.handler';
 import EventHandler from './structures/handlers/event.handler';
 import Container from './structures/container';
+import mongoose from 'mongoose';
 
 export interface ClientOptions extends DiscordJsClientOptions {
+  token: string;
+  dbUri: string;
   logLevel?: LogLevel;
   logStrategy?: LogStrategy;
+  environment: string;
 }
 
 export default class Client extends DiscordJsClient {
+  public override options: ClientOptions;
   private handlers!: Handler[];
   private stores!: Store<any>[];
   private piecesLoader!: PiecesLoader;
@@ -26,17 +32,25 @@ export default class Client extends DiscordJsClient {
   public constructor(options: ClientOptions) {
     super(options);
 
+    this.options = options;
+
     this.initializeContainer(options);
 
     this.initializeStructures();
   }
 
-  public async run(token: string): Promise<void> {
+  public async run(): Promise<void> {
     try {
       for (const store of this.stores) await store.initialize();
       for (const handler of this.handlers) await handler.initialize();
 
-      await this.login(token);
+      await mongoose.connect(this.options.dbUri, {
+        dbName: `r6customs_${this.options.environment}`,
+      });
+
+      this.container.logger.info(databaseReadyMessage());
+
+      await this.login(this.options.token);
     } catch (error) {
       this.container.logger.error(error);
       process.exit(1);
