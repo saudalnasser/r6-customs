@@ -1,7 +1,7 @@
-const { NODE_ENV, TOKEN, CLIENT_ID, GUILD_ID } = process.env;
+const { NODE_ENV, TOKEN, CLIENT_ID, GUILD_ID, DB_URI } = process.env;
 
 function validate(): void {
-  if (!NODE_ENV || !TOKEN || !CLIENT_ID || !GUILD_ID) {
+  if (!NODE_ENV || !TOKEN || !CLIENT_ID || !GUILD_ID || !DB_URI) {
     throw new Error('Missing environment variables');
   }
 }
@@ -11,6 +11,7 @@ interface Config {
   token: string;
   clientId: string;
   guildId: string;
+  dbUri: string;
   validate(): void;
 }
 
@@ -19,6 +20,7 @@ const config: Config = {
   token: TOKEN ?? '<token>',
   clientId: CLIENT_ID ?? '<clientId>',
   guildId: GUILD_ID ?? '<guildId>',
+  dbUri: DB_URI ?? '<dbUri>',
   validate,
 };
 
