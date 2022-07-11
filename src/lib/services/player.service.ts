@@ -7,7 +7,7 @@ class PlayerService extends Service {
     const registered: boolean = (await Player.exists({ discordId })) !== null;
     if (registered) throw new UserError('you are already registered', 'Registered');
 
-    const uplayId: string | null = await this.container.r6statsService.getUplayId(uplay);
+    const uplayId: string | null = await this.container.r6apiService.getUplayId(uplay);
     if (uplayId === null)
       throw new UserError(`the \`${uplay}\` username does not exist!`, 'UplayDoesNotExist');
 

@@ -22,9 +22,12 @@ class RegisterCommand extends Command {
     try {
       await this.container.playerService.register(discordId, uplay);
     } catch (error: any) {
-      const message: string = error.isUserError ? error.message : 'unexpected error occurred!';
+      if (error.isUserError)
+        return await interaction.reply({ content: error.message, ephemeral: true });
 
-      return await interaction.reply({ content: message, ephemeral: true });
+      this.container.logger.error(error);
+
+      return await interaction.reply({ content: 'unexpected error occurred!', ephemeral: true });
     }
 
     await interaction.reply({ content: 'you have been registered successfully!', ephemeral: true });

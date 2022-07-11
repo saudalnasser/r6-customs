@@ -13,14 +13,14 @@ import CommandHandler from './structures/handlers/command.handler';
 import EventHandler from './structures/handlers/event.handler';
 import Container from './structures/container';
 import mongoose from 'mongoose';
-import R6StatsService from './services/r6stats.service';
+import R6ApiService from './services/r6api.service';
 import PlayerService from './services/player.service';
 
 export interface ClientOptions extends DiscordJsClientOptions {
   token: string;
   dbUri: string;
-  r6apiKey: string;
-  r6apiBaseUrl: string;
+  ubiEmail: string;
+  ubiPassword: string;
   logLevel?: LogLevel;
   logStrategy?: LogStrategy;
   environment: string;
@@ -70,10 +70,10 @@ export default class Client extends DiscordJsClient {
     const logStrategy: LogStrategy = this.options.logStrategy ?? new ConsoleLogStrategy();
     this.container.logger = new Logger(logLevel, logStrategy);
 
-    this.container.r6statsService = new R6StatsService(
+    this.container.r6apiService = new R6ApiService(
       this.container,
-      this.options.r6apiBaseUrl,
-      this.options.r6apiKey
+      this.options.ubiEmail,
+      this.options.ubiPassword
     );
 
     this.container.playerService = new PlayerService(this.container);
