@@ -15,6 +15,7 @@ import Container from './structures/container';
 import mongoose from 'mongoose';
 import R6ApiService from './services/r6api.service';
 import PlayerService from './services/player.service';
+import MatchService from './services/matchmaking/match.service';
 
 export interface ClientOptions extends DiscordJsClientOptions {
   token: string;
@@ -77,6 +78,8 @@ export default class Client extends DiscordJsClient {
     );
 
     this.container.playerService = new PlayerService(this.container);
+
+    this.container.matchService = new MatchService(this.container, null);
   }
 
   private initializeStructures(): void {
