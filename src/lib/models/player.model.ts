@@ -1,6 +1,7 @@
-import { Model, model, Schema } from 'mongoose';
+import { Model, model, Schema, Types } from 'mongoose';
 
 export interface IPlayer {
+  _id?: Types.ObjectId;
   discordId: string;
   uplayId: string;
 }
