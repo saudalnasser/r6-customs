@@ -14,7 +14,7 @@ const options: ClientOptions = {
   ubiEmail: config.ubiEmail,
   ubiPassword: config.ubiPassword,
   shards: 'auto',
-  intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_MESSAGES'],
+  intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_MESSAGES', 'GUILD_VOICE_STATES'],
   logLevel: config.environment === 'development' ? LogLevel.Debug : LogLevel.Info,
   environment: config.environment,
 };
