@@ -14,7 +14,9 @@ class StrictLoadStrategy implements LoadStrategy {
     const path: string = join(process.cwd(), 'dist', `${pieceName}s`);
     const files: string[] = readdirSync(path);
 
-    for (const file of files) {
+    const filteredFiles: string[] = files.filter((file) => file.endsWith('.js'));
+
+    for (const file of filteredFiles) {
       const Type: any = await this.importType(pieceName, file);
       const instance: T = new Type(container) as T;
 
