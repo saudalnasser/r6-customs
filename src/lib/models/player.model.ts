@@ -1,4 +1,4 @@
-import { Model, model, Schema, Types } from 'mongoose';
+import { Model, model, models, Schema, Types } from 'mongoose';
 
 export interface IPlayer {
   _id?: Types.ObjectId;
@@ -11,6 +11,4 @@ const schema: Schema<IPlayer> = new Schema<IPlayer>({
   uplayId: { type: String, required: true },
 });
 
-const Player: Model<IPlayer> = model<IPlayer>('Player', schema);
-
-export default Player;
+export const Player: Model<IPlayer> = models.Player || model<IPlayer>('Player', schema);

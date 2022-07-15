@@ -1,4 +1,4 @@
-import Player from '../models/player.model';
+import { Player } from '../models/player.model';
 import UserError from '../types/user.error';
 import Service from './service';
 

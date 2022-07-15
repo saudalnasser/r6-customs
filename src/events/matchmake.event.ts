@@ -1,6 +1,6 @@
 import { VoiceState } from 'discord.js';
+import { Player } from '../lib/models/player.model';
 import ApplyOptions from '../lib/decorators/pieces/options.decorator';
-import Player from '../lib/models/player.model';
 import Event, { EventOptions } from '../lib/structures/pieces/event.piece';
 import Events from '../lib/types/events.enum';
 

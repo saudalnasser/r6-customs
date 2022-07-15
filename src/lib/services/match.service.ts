@@ -1,9 +1,9 @@
 import { Types } from 'mongoose';
 import { randomEnum, randomIndex } from '../utils/random';
+import { Player, IPlayer } from '../models/player.model';
+import { Match, IMatch } from '../models/match.model';
 import Service from './service';
 import Container from '../structures/container';
-import Player, { IPlayer } from '../models/player.model';
-import Match, { IMatch } from '../models/match.model';
 import Maps from '../types/maps.enum';
 
 interface MatchmakingStrategy {

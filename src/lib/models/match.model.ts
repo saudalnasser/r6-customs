@@ -1,5 +1,5 @@
 import { IPlayer } from './player.model';
-import { Model, model, Schema, Types } from 'mongoose';
+import { Model, model, models, Schema, Types } from 'mongoose';
 import Maps from '../types/maps.enum';
 
 export type MatchState = 'ongoing' | 'resolved';
@@ -30,6 +30,4 @@ const schema: Schema<IMatch> = new Schema<IMatch>({
   },
 });
 
-const Match: Model<IMatch> = model<IMatch>('Match', schema);
-
-export default Match;
+export const Match: Model<IMatch> = models.Match || model<IMatch>('Match', schema);
