@@ -2,7 +2,7 @@ import { Client } from 'discord.js';
 import Logger from '../utils/logger/logger';
 import R6ApiService from '../services/r6api.service';
 import PlayerService from '../services/player.service';
-import MatchService from '../services/matchmaking/match.service';
+import MatchService from '../services/match.service';
 
 class Container {
   public client!: Client;
